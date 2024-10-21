@@ -1,0 +1,22 @@
+[run]
+branch = True
+source=pycorpkit
+omit = *migrations*,
+       *urls*,
+       *test*,
+       *admin*,
+       ./manage.py,
+       ./pycorpkit/config/*,
+       ./pycorpkit/wsgi.py,
+       pycorpkit/**/migrations/*,
+       *__init__*,
+       ./dataseeder.py,
+       ./setup.py,
+       ./pycorpkit/common/utils/choices.py
+
+[report]
+show_missing=True
+exclude_lines=pragma: no cover
+
+[html]
+directory=coverage
