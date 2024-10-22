@@ -5,17 +5,17 @@ Usage
 
 Features
 --------
-+ Associates features with subscription plans and define limits
-+ Manage a user wallet for managing subscription payments, refunds and credits
-+ Records all wallet transactions including subscription payments, cancellation and refunds
 + Capture details for a subscription plan
 + Define cost and frequency of billing for a plan
 + Associates user's to specific subscriptions
++ Manage a user wallet for managing subscription payments, refunds and credits
++ Records all wallet transactions including subscription payments, cancellation and refunds
 + Define feature that can be included in subscription plans
++ Associates features with subscription plans and define limits
 + Define pricing tiers for features with tiered pricing
 + Tracks usage of features by subscribed users
 
-Pricing model
+Pricing Model
 -------------
 
 FLAT
@@ -41,7 +41,7 @@ PACKAGE
 Users are charged for predefined packages or bundles.
 For example 500 SMS for $20. If the user needs more, they purchase another package
 
-Feature types
+Feature Types
 -------------
 
 USAGE
@@ -65,8 +65,7 @@ BOOLEAN
 Represents features that are either on or off (enabled/disabled).
 For example, "Access to API" or "Dark Mode Support".
 
-
-Error handling
+Error Handling
 --------------
 Comprehensive Error Tracking:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

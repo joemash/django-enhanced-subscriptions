@@ -5,7 +5,7 @@ Quick start
 
 1. Install package
 
-.. code-block:: bash
+.. code-block:: python
 
    pip install django-enhanced-subcriptions
 
@@ -21,12 +21,14 @@ Quick start
 
 3. Run migrations:
 
-   .. code-block:: bash
+   .. code-block:: python
 
       python manage.py migrate
 
-4. Override the below config in settings.py 
-   .. code-block:: bash
+4. Override the below config in ``settings.py``
+
+   .. code-block:: python
+
       SUBSCRIPTION = {
         "CACHE_TIMEOUT_SECONDS":  60,
         "BASE_RETRY_DELAY_SECONDS": 300,
@@ -35,4 +37,3 @@ Quick start
         "CACHE_TIMEOUT_MINUTES": 5,
         "GRACE_PERIOD_DAYS": 1,
       }
-
