@@ -8,8 +8,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils import timezone
 
+from subscription.billing import UsageBasedBilling
 from subscription.error_handling import ErrorHandler
-from subscription.feature import UsageBasedBilling
 from subscription.models.feature import FeatureType, FeatureUsage, PlanFeature
 from subscription.models.plan import UserSubscription
 from subscription.models.wallet import TransactionStatus, Wallet
@@ -130,7 +130,7 @@ class PlanManager:
             transaction = wallet.process_subscription_cancellation(
                 subscription=subscription,
                 prorate=True,
-                description=f"Automatic refund for expired subscription - {subscription.subscription.plan.plan_name}", # noqa
+                description=f"Automatic refund for expired subscription - {subscription.subscription.plan.plan_name}",  # noqa
             )
             return PaymentResult(success=True, transaction=transaction)
         except ValidationError as e:

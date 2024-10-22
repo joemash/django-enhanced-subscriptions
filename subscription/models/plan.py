@@ -4,6 +4,7 @@ from datetime import timedelta
 from uuid import uuid4
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -196,14 +197,14 @@ class UserSubscription(models.Model):
         help_text=_("the user this subscription applies to"),
         null=True,
         on_delete=models.CASCADE,
-        related_name="subscriptions",
+        related_name="subscription",
     )
     subscription = models.ForeignKey(
         PlanCost,
         help_text=_("the plan costs and billing frequency for this user"),
         null=True,
         on_delete=models.CASCADE,
-        related_name="subscriptions",
+        related_name="subscription",
     )
     date_billing_start = models.DateTimeField(
         blank=True,
@@ -237,6 +238,10 @@ class UserSubscription(models.Model):
         default=False,
         help_text=_("whether this subscription is cancelled or not"),
     )
+
+    def clean(self):
+        if self.date_billing_end and self.date_billing_end <= self.date_billing_start:
+            raise ValidationError("End date must be after start date")
 
     class Meta:
         ordering = (

@@ -9,12 +9,8 @@ from django.test import RequestFactory
 from django.utils import timezone
 from model_bakery import baker
 
-from subscription.feature import (
-    CachedFeatureChecker,
-    FeatureChecker,
-    UsageBasedBilling,
-    requires_feature,
-)
+from subscription.billing import UsageBasedBilling
+from subscription.feature import CachedFeatureChecker, FeatureChecker, requires_feature
 from subscription.models.feature import (
     Feature,
     FeatureType,
@@ -74,6 +70,7 @@ def user_subscription(user, plan_cost):
         subscription=plan_cost,
         date_billing_start=current,
         date_billing_next=current + timedelta(days=30),
+        active=True,
     )
 
 
@@ -291,7 +288,11 @@ class TestFeatureDecorator:
         def test_view(request):
             return HttpResponse(status=200)
 
-        # Patch CachedFeatureChecker to mock feature access
+        # Ensure user_subscription is active
+        user_subscription.active = True
+        user_subscription.cancelled = False
+        user_subscription.save()
+
         with patch("subscription.feature.CachedFeatureChecker") as MockChecker:
             checker_mock = MockChecker.return_value
 
@@ -301,27 +302,29 @@ class TestFeatureDecorator:
             # Test authenticated request with feature access
             request = request_factory.get("/")
             request.user = user_subscription.user
-            request.user.subscription = user_subscription
-
             response = test_view(request)
             assert response.status_code == 200
 
             # Simulate unauthenticated request
             request = request_factory.get("/")
             request.user = Mock(is_authenticated=False)
-
             response = test_view(request)
             assert isinstance(response, HttpResponseForbidden)
 
-            # Simulate feature access denied (e.g., feature disabled)
+            # Simulate feature access denied
             checker_mock.can_access.return_value = Mock(
                 allowed=False, error="Feature disabled"
             )
-
             request = request_factory.get("/")
             request.user = user_subscription.user
-            request.user.subscription = user_subscription
+            response = test_view(request)
+            assert isinstance(response, HttpResponseForbidden)
 
+            # Test inactive subscription
+            user_subscription.active = False
+            user_subscription.save()
+            request = request_factory.get("/")
+            request.user = user_subscription.user
             response = test_view(request)
             assert isinstance(response, HttpResponseForbidden)
 

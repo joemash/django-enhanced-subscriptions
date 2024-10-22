@@ -81,6 +81,136 @@ Before a user can pay for subscriptions, they need to have funds in their wallet
 
 It's important to ensure that users have sufficient funds in their wallet to cover their subscription costs.
 
+Handling Refunds
+^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   refund = wallet.process_refund(
+       payment_transaction,
+       amount=Decimal("5.00"),
+       reason=RefundReason.CUSTOMER_REQUEST,
+       description="Partial refund"
+   )
+
+3. Add Features To A Subscription Plan
+--------------------------------------
+Summary
+~~~~~~~
++ Define feature that can be included in subscription plans
++ Associates features with subscription plans and define limits
++ Define pricing tiers for features with tiered pricing
++ Tracks usage of features by subscribed users
+
+Creating A Feature
+^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   from subscription.models.feature import Feature, FeatureType, PricingModel
+
+   feature = Feature.objects.create(
+       name="API Calls",
+       code="api_calls",
+       feature_type=FeatureType.USAGE.value,
+       pricing_model=PricingModel.FLAT.value,
+       unit="calls"
+   )
+
+Adding A Feature To A Plan
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Add via admin
+
+.. image:: images/add_feature.png
+
+OR
+
+.. code-block:: python
+
+   from subscription.models.feature import PlanFeature
+
+   plan_feature = PlanFeature.objects.create(
+       plan=subscription_plan,
+       feature=feature,
+       enabled=True,
+       quota=1000,
+       overage_rate=Decimal("0.01")
+   )
+
+
+4. Feature Access Control
+-------------------------
+
+Supported approaches to limit access based on features include:
+
+* View decoration to constrain Function-based views
+
+* Class-Based View mixin to constrain individual views.
+
+* Service layer approach
+
+Class Based Mixin
+^^^^^^^^^^^^^^^^^
+.. code-block:: python
+   from subscription.feature import FeatureRequiredMixin
+
+   class AnalyticsView(FeatureRequiredMixin, TemplateView):
+      template_name = 'analytics.html'
+      required_features = {'advanced_analytics'}
+
+   class ExportView(FeatureRequiredMixin, View):
+      required_features = {'export_data', 'api_access'}
+
+View Decoratoration
+^^^^^^^^^^^^^^^^^^^
+.. code-block:: python
+
+   from subscription.feature import requires_feature
+   from django.http import HttpResponse
+
+   @requires_feature("api_calls")
+   def api_view(request):
+       return HttpResponse("API access granted")
+   
+   @requires_feature('advanced_analytics')
+    def get(self, request):
+        ...
+ 
+    @requires_feature('more_videos')
+    def post(self, request):
+
+Service Layer Approach
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   from subscription.feature import FeatureChecker
+
+   checker = FeatureChecker(user_subscription)
+   access = checker.can_access("api_calls")
+
+   if access.allowed:
+       # Proceed with feature access
+   else:
+       print(access.error)  # "Quota exceeded" or "Feature not available"
+
+
+5. Usage-Based Billing
+----------------------
+
+.. code-block:: python
+
+   from subscription.feature import UsageBasedBilling
+
+   billing = UsageBasedBilling()
+   charges = billing.calculate_charges(user_subscription, "api_calls", 150)
+
+   print(charges["total"])  # Total charge for the usage
+
+6. Subscription Management
+--------------------------
+
 Managing Subscriptions With ``PlanManager``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -150,18 +280,6 @@ This will:
 - Handle any necessary clean-up (e.g., resetting feature usage)
 
 
-Handling Refunds
-^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-   refund = wallet.process_refund(
-       payment_transaction,
-       amount=Decimal("5.00"),
-       reason=RefundReason.CUSTOMER_REQUEST,
-       description="Partial refund"
-   )
-
 Automatic Subscription Processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -199,133 +317,15 @@ The PlanManager includes logic to handle failed payments:
    # PlanManager uses this when handling failed renewals
    plan_manager._handle_failed_renewal(subscription)
 
-Monitoring Wallet Balance
+Cancelling A Subscription
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It's crucial to keep users informed about their wallet balance, especially as it relates to their subscriptions:
-
 .. code-block:: python
+   from subscription.models.wallet import Wallet
+   from decimal import Decimal
 
-   from django.core.mail import send_mail
-
-   def notify_low_balance(user):
-       wallet = Wallet.objects.get(user=user)
-       if wallet.balance < Decimal("10.00"):
-           send_mail(
-               'Low Wallet Balance',
-               'Your wallet balance is low. Please deposit funds to maintain your subscriptions.',
-               'from@example.com',
-               [user.email],
-               fail_silently=False,
-           )
-
-You could run this check after each subscription payment or as part of a regular maintenance task.
-
-3. Add Features To A Subscription Plan
---------------------------------------
-Summary
-~~~~~~~
-+ Define feature that can be included in subscription plans
-+ Associates features with subscription plans and define limits
-+ Define pricing tiers for features with tiered pricing
-+ Tracks usage of features by subscribed users
-
-Creating A Feature
-^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-   from subscription.models.feature import Feature, FeatureType, PricingModel
-
-   feature = Feature.objects.create(
-       name="API Calls",
-       code="api_calls",
-       feature_type=FeatureType.USAGE.value,
-       pricing_model=PricingModel.FLAT.value,
-       unit="calls"
-   )
-
-Adding A Feature To A Plan
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Add via admin
-
-.. image:: images/add_feature.png
-
-OR
-
-.. code-block:: python
-
-   from subscription.models.feature import PlanFeature
-
-   plan_feature = PlanFeature.objects.create(
-       plan=subscription_plan,
-       feature=feature,
-       enabled=True,
-       quota=1000,
-       overage_rate=Decimal("0.01")
-   )
-
-
-4. Feature Access Control
--------------------------
-
-Using the Feature Checker
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   from subscription.feature import FeatureChecker
-
-   checker = FeatureChecker(user_subscription)
-   access = checker.can_access("api_calls")
-
-   if access.allowed:
-       # Proceed with feature access
-   else:
-       print(access.error)  # "Quota exceeded" or "Feature not available"
-
-Decorator For Feature-based Access Control
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   from subscription.feature import requires_feature
-   from django.http import HttpResponse
-
-   @requires_feature("api_calls")
-   def api_view(request):
-       return HttpResponse("API access granted")
-
-5. Usage-Based Billing
-----------------------
-
-.. code-block:: python
-
-   from subscription.feature import UsageBasedBilling
-
-   billing = UsageBasedBilling()
-   charges = billing.calculate_charges(user_subscription, "api_calls", 150)
-
-   print(charges["total"])  # Total charge for the usage
-
-6. Subscription Management
---------------------------
-
-Processing Subscriptions
-------------------------
-
-.. code-block:: python
-
-   from subscription.manager import PlanManager
-
-   manager = PlanManager()
-   manager.process_subscriptions()  # Processes all due subscriptions
-
-Cancelling A Subscription
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
+   # Assuming you have a user object
+   user_wallet, created = Wallet.objects.get_or_create(user=user)
 
    refund = wallet.process_subscription_cancellation(user_subscription, prorate=True)
 

@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from model_bakery import baker
 
-from subscription.feature import UsageBasedBilling
+from subscription.billing import UsageBasedBilling
 from subscription.manager import PlanManager
 from subscription.models.feature import FeatureType
 from tests.factories import (

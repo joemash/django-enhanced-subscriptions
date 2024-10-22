@@ -108,6 +108,9 @@ class PlanFeature(models.Model):
     class Meta:
         unique_together = ("plan", "feature")
 
+    def __str__(self):
+        return f"{self.plan.plan_name} {self.feature.name}"
+
 
 class PricingTier(models.Model):
     """Defines pricing tiers for features with tiered pricing."""
