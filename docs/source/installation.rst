@@ -36,4 +36,5 @@ Quick start
         "MAX_RETRY_ATTEMPTS": 3,
         "CACHE_TIMEOUT_MINUTES": 5,
         "GRACE_PERIOD_DAYS": 1,
+        "ENABLE_ADMIN": True, 
       }

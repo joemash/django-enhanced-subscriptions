@@ -8,6 +8,13 @@ Usage
 
 Creating A Subscription Plan
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+You can use the admin
+
+.. image:: images/plan_main.png
+
+.. image:: images/plan_details.png
+
+Or via code
 
 .. code-block:: python
 
@@ -240,6 +247,12 @@ Creating A Feature
 
 Adding A Feature To A Plan
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Add via admin
+
+.. image:: images/add_feature.png
+
+OR
 
 .. code-block:: python
 
