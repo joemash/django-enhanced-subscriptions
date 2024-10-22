@@ -183,6 +183,7 @@ Class Based Mixin
 ^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
+
    from subscription.feature import FeatureRequiredMixin
 
    class AnalyticsView(FeatureRequiredMixin, TemplateView):
@@ -360,6 +361,7 @@ Cancelling A Subscription
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
+
    from subscription.models.wallet import Wallet
    from decimal import Decimal
 
