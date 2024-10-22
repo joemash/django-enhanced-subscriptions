@@ -1,19 +1,16 @@
-Usage
-=====
+Quick start
+===========
 
 .. _installation:
 
-Installation
-============
+1. Install package
 
 .. code-block:: bash
 
    pip install django-enhanced-subcriptions
 
-Quick start
-===========
 
-1. Add "django-enhanced-subcriptions" to your ``INSTALLED_APPS`` setting:
+2. Add "django-enhanced-subcriptions" to your ``INSTALLED_APPS`` setting:
 
    .. code-block:: python
 
@@ -22,56 +19,20 @@ Quick start
           'django-enhanced-subcriptions',
       ]
 
-2. Run migrations:
+3. Run migrations:
 
    .. code-block:: bash
 
       python manage.py migrate
 
-Development
-===========
-
-To set up the development environment:
-
-1. Clone the repository
-2. Create a virtual environment and activate it
-3. Install development dependencies:
-
+4. Override the below config in settings.py 
    .. code-block:: bash
+      SUBSCRIPTION = {
+        "CACHE_TIMEOUT_SECONDS":  60,
+        "BASE_RETRY_DELAY_SECONDS": 300,
+        "FIXED_INTERVAL_DELAY": 3600,
+        "MAX_RETRY_ATTEMPTS": 3,
+        "CACHE_TIMEOUT_MINUTES": 5,
+        "GRACE_PERIOD_DAYS": 1,
+      }
 
-      pip install -e ".[dev]"
-
-4. Run tests:
-
-   .. code-block:: bash
-
-      python -m pytest tests
-
-   OR
-
-   .. code-block:: bash
-
-      pytest tests/
-
-Install test dependencies
-==========================
-
-.. code-block:: bash
-
-   pip install -e ".[test]"
-
-Making migrations
-=================
-
-.. code-block:: bash
-
-   python testapp/manage.py makemigrations
-
-   python testapp/manage.py makemigrations <app_name> --empty
-
-Migrate
-=======
-
-.. code-block:: bash
-
-   python testapp/manage.py migrate

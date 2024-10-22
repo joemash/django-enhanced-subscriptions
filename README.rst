@@ -1,107 +1,57 @@
-## About
-This Django library provides a comprehensive solution for managing subscriptions, feature access and wallet functionality
+About
+-----
+This Django library provides a comprehensive solution for managing 
+subscriptions, feature access and wallet functionality
 
-## Installation
+Features
+--------
++ Associates features with subscription plans and define limits
++ Manage a user wallet for managing subscription payments, refunds and credits
++ Records all wallet transactions including subscription payments, cancellation and refunds
++ Capture details for a subscription plan
++ Define cost and frequency of billing for a plan
++ Associates user's to specific subscriptions
++ Define feature that can be included in subscription plans
++ Define pricing tiers for features with tiered pricing
++ Tracks usage of features by subscribed users
 
-```bash
-pip install django-enhanced-subcriptions
-```
+Installation
+------------
 
-## Quick start
+1. Install package
 
-1. Add "django-enhanced-subcriptions" to your INSTALLED_APPS setting:
+.. code-block:: bash
 
-```python
-INSTALLED_APPS = [
-    ...
-    'django-enhanced-subcriptions',
-]
-```
-
-2. Run migrations:
-
-```bash
-python manage.py migrate
-```
-
-## Development
-
-To set up the development environment:
-
-1. Clone the repository
-2. Create a virtual environment and activate it
-3. Install development dependencies:
-
-```bash
-pip install -e ".[dev]"
-```
-
-4. Run tests:
-```bash
-python -m pytest tests
-
-OR
-
-pytest tests/
-```
-
-## Install test dependencies
-
-pip install -e ".[test]"
-
-## Making migrations
-
-python testapp/manage.py makemigrations
-
-python testapp/manage.py makemigrations <app_name> --empty
-
-## Migrate
-
-python testapp/manage.py migrate
-
-Read the tutorial here:
-
-https://docs.readthedocs.io/en/stable/tutorial/
+   pip install django-enhanced-subcriptions
 
 
-Comprehensive Error Tracking:
+2. Add "django-enhanced-subcriptions" to your ``INSTALLED_APPS`` setting:
 
-Logs all errors with detailed context
-Tracks retry attempts and their outcomes
-Maintains error history for auditing
-Uses appropriate database indexes for efficient querying
+   .. code-block:: python
 
+      INSTALLED_APPS = [
+          ...
+          'django-enhanced-subcriptions',
+      ]
 
-Flexible Retry Strategies:
+3. Run migrations:
 
-Exponential backoff for transient errors
-Immediate retry for urgent operations like refunds
-Fixed interval retries for predictable issues
-Manual intervention option for complex cases
+   .. code-block:: bash
 
-Recovery Mechanisms:
+      python manage.py migrate
 
-Automated retry processing
-Manual intervention triggers
-Clear audit trail of all attempts
-State transition management
+4. Override the below config in settings.py 
+   .. code-block:: bash
+      SUBSCRIPTION = {
+        "CACHE_TIMEOUT_SECONDS":  60,
+        "BASE_RETRY_DELAY_SECONDS": 300,
+        "FIXED_INTERVAL_DELAY": 3600,
+        "MAX_RETRY_ATTEMPTS": 3,
+        "CACHE_TIMEOUT_MINUTES": 5,
+        "GRACE_PERIOD_DAYS": 1,
+      }
 
+Docs:
+-----
 
-Set up periodic tasks to process retries:
-
-In your task scheduler (e.g., Celery)
-
-@periodic_task(run_every=timedelta(minutes=5))
-def process_subscription_retries():
-    RetryManager().process_pending_retries()
-
-Add monitoring for unresolved errors:
-
-In your monitoring system
-
-def check_subscription_errors():
-    report = RetryManager().get_failed_subscriptions_report()
-    if report.filter(count__gt=0).exists():
-        alert_operations_team(report)
-
-
+`Comprehensive documentation <https://django-enhanced-subscriptions.readthedocs.io/en/latest/index.html/>`

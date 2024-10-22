@@ -1,8 +1,13 @@
-1. Subscription Plans
-=====================
+Usage
+=====
 
-Creating a Subscription Plan
+.. _usage:
+
+1. Set up subscription plans
 ----------------------------
+
+Creating a subscription plan
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -23,8 +28,8 @@ Creating a Subscription Plan
        cost=Decimal("10.00")
    )
 
-Subscribing a User
-------------------
+subscribing a user
+~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -39,10 +44,10 @@ Subscribing a User
    )
 
 2. Features
-===========
+-----------
 
-Creating a Feature
-------------------
+Creating a feature
+~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -56,8 +61,8 @@ Creating a Feature
        unit="calls"
    )
 
-Adding a Feature to a Plan
---------------------------
+Adding a feature to a plan
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -71,13 +76,13 @@ Adding a Feature to a Plan
        overage_rate=Decimal("0.01")
    )
 
-3. Wallet Deposits and Subscription Management
-==============================================
+3. Wallet deposits and subscription management
+-----------------------------------------------
 
 After setting up plans, features, and subscriptions, the next steps involve funding the user's wallet and managing subscriptions using the PlanManager. Here's a detailed guide on these processes:
 
 Depositing Funds into the Wallet
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before a user can pay for subscriptions, they need to have funds in their wallet. Here's how to handle wallet deposits:
 
@@ -98,7 +103,7 @@ Before a user can pay for subscriptions, they need to have funds in their wallet
 It's important to ensure that users have sufficient funds in their wallet to cover their subscription costs.
 
 Managing Subscriptions with PlanManager
----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The PlanManager is responsible for handling new, due, and expired subscriptions. Here's how to use it:
 
@@ -118,7 +123,7 @@ This method will:
 3. Handle expired subscriptions
 
 Activating New Subscriptions
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For new subscriptions:
 
@@ -134,7 +139,7 @@ This will:
 - If unsuccessful (e.g., insufficient funds), the subscription remains inactive
 
 Renewing Due Subscriptions
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For subscriptions that are due for renewal:
 
@@ -150,7 +155,7 @@ This will:
 - If unsuccessful, it will handle the failed renewal based on the grace period settings
 
 Handling Expired Subscriptions
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For subscriptions that have expired:
 
@@ -166,7 +171,7 @@ This will:
 
 
 Handling Refunds
-----------------
+~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -178,7 +183,7 @@ Handling Refunds
    )
 
 Automatic Subscription Processing
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In a production environment, you'll want to automatically process subscriptions regularly. This can be achieved using a scheduled task or a management command:
 
@@ -198,7 +203,7 @@ In a production environment, you'll want to automatically process subscriptions 
 You can then set up a cron job or use a task scheduler like Celery to run this command regularly (e.g., daily).
 
 Handling Failed Payments
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The PlanManager includes logic to handle failed payments:
 
@@ -215,7 +220,7 @@ The PlanManager includes logic to handle failed payments:
    plan_manager._handle_failed_renewal(subscription)
 
 Monitoring Wallet Balance
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It's crucial to keep users informed about their wallet balance, especially as it relates to their subscriptions:
 
@@ -237,10 +242,10 @@ It's crucial to keep users informed about their wallet balance, especially as it
 You could run this check after each subscription payment or as part of a regular maintenance task.
 
 4. Feature Access Control
-=========================
+-------------------------
 
 Using the Feature Checker
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -255,7 +260,7 @@ Using the Feature Checker
        print(access.error)  # "Quota exceeded" or "Feature not available"
 
 Decorator for Feature-based Access Control
-------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -267,7 +272,7 @@ Decorator for Feature-based Access Control
        return HttpResponse("API access granted")
 
 5. Usage-Based Billing
-======================
+----------------------
 
 .. code-block:: python
 
@@ -279,7 +284,7 @@ Decorator for Feature-based Access Control
    print(charges["total"])  # Total charge for the usage
 
 6. Subscription Management
-==========================
+--------------------------
 
 Processing Subscriptions
 ------------------------
@@ -292,14 +297,14 @@ Processing Subscriptions
    manager.process_subscriptions()  # Processes all due subscriptions
 
 Cancelling a Subscription
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
    refund = wallet.process_subscription_cancellation(user_subscription, prorate=True)
 
 Important Notes
-===============
+~~~~~~~~~~~~~~~
 
 1. The library supports different feature types: Boolean, Quota, Rate-limited, and Usage-based.
 2. Pricing models include Flat rate, Tiered, Volume-based, and Package-based billing.
@@ -307,3 +312,4 @@ Important Notes
 4. The library includes a caching mechanism for optimized feature access checks.
 5. Wallet transactions are recorded for deposits, payments, and refunds.
 6. Grace periods can be set for subscriptions to handle failed payments.
+
