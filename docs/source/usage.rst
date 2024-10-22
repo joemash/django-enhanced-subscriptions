@@ -138,9 +138,38 @@ OR
        overage_rate=Decimal("0.01")
    )
 
+Adding Pricing Tiers
+^^^^^^^^^^^^^^^^^^^^
+
+Add via admin
+
+.. image:: images/tiers.png
+
+OR
+
+.. code-block:: python
+
+   from subscription.models.feature import PricingTier
+
+   plan_feature1 = PricingTier.objects.create(
+       plan_feature=plan_feature,
+       start_quantity=0,
+       end_quantity=10,
+       unit_price=20
+   )
+   plan_feature2 = PricingTier.objects.create(
+       plan_feature=plan_feature,
+       start_quantity=10,
+       end_quantity=20,
+       unit_price=30
+   )
+
 
 4. Feature Access Control
 -------------------------
+
+Summary
+~~~~~~~
 
 Supported approaches to limit access based on features include:
 
@@ -152,6 +181,7 @@ Supported approaches to limit access based on features include:
 
 Class Based Mixin
 ^^^^^^^^^^^^^^^^^
+
 .. code-block:: python
    from subscription.feature import FeatureRequiredMixin
 
@@ -164,6 +194,7 @@ Class Based Mixin
 
 View Decoratoration
 ^^^^^^^^^^^^^^^^^^^
+
 .. code-block:: python
 
    from subscription.feature import requires_feature
@@ -210,6 +241,14 @@ Service Layer Approach
 
 6. Subscription Management
 --------------------------
+
+Summary
+~~~~~~~
+
+1. Activate new subscriptions
+2. Renew due subscriptions
+3. Handle expired subscriptions
+
 
 Managing Subscriptions With ``PlanManager``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
