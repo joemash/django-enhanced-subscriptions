@@ -27,6 +27,9 @@ MIDDLEWARE = (
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 )
 
+# urls
+ROOT_URLCONF = 'urls'
+
 # DEBUG SETTINGS
 # Used for testapp - DO NOT USE IN PRODUCTION
 DEBUG = True

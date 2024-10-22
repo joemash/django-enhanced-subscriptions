@@ -12,6 +12,7 @@ def get_subscription_config():
         "MAX_RETRY_ATTEMPTS": subscription_config.get("MAX_RETRY_ATTEMPTS", 3),
         "CACHE_TIMEOUT_MINUTES": subscription_config.get("CACHE_TIMEOUT_MINUTES", 5),
         "GRACE_PERIOD_DAYS": subscription_config.get("GRACE_PERIOD_DAYS", 1),
+        "ENABLE_ADMIN": subscription_config.get("ENABLE_ADMIN", True),
     }
 
 

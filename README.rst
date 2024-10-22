@@ -51,9 +51,10 @@ Installation
         "MAX_RETRY_ATTEMPTS": 3,
         "CACHE_TIMEOUT_MINUTES": 5,
         "GRACE_PERIOD_DAYS": 1,
+        "ENABLE_ADMIN": True, 
       }
 
 Documentation
 -------------
 
-`Comprehensive documentation <https://django-enhanced-subscriptions.readthedocs.io/en/latest/index.html/>`
+`https://django-enhanced-subscriptions.readthedocs.io/en/latest/index.html/`
