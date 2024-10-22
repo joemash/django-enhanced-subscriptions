@@ -1,5 +1,5 @@
-Usage
-=====
+Features
+========
 
 .. _features:
 
