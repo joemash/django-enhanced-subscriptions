@@ -31,7 +31,7 @@ Installation
 
       INSTALLED_APPS = [
           ...
-          'django-enhanced-subcriptions',
+          'subcription',
       ]
 
 3. Run migrations:
@@ -57,4 +57,4 @@ Installation
 Documentation
 -------------
 
-`https://django-enhanced-subscriptions.readthedocs.io/en/latest/index.html`
+https://django-enhanced-subscriptions.readthedocs.io/en/latest/index.html

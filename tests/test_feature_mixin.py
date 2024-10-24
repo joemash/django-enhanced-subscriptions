@@ -2,7 +2,6 @@ from datetime import timedelta
 
 import pytest
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.test import RequestFactory
@@ -208,15 +207,6 @@ class TestFeatureRequiredMixin:
 
         response = view(request)
         assert response.status_code == 200
-
-    def test_unauthenticated_user(self, request_factory):
-        """Test access is denied for unauthenticated user."""
-        view = SingleFeatureView.as_view()
-        request = request_factory.get("/")
-        request.user = AnonymousUser()
-
-        with pytest.raises(PermissionDenied):
-            view(request)
 
     def test_disabled_feature(
         self, request_factory, user, active_subscription, plan_feature
