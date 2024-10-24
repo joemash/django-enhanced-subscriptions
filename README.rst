@@ -57,4 +57,4 @@ Installation
 Documentation
 -------------
 
-`https://django-enhanced-subscriptions.readthedocs.io/en/latest/index.html/`
+`https://django-enhanced-subscriptions.readthedocs.io/en/latest/index.html`
