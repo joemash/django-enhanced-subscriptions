@@ -1,4 +1,4 @@
-Welcome to django-enhanced-subcriptions documentation!
+Welcome to django-enhanced-subscriptions documentation!
 ======================================================
 
 This Django library provides a comprehensive solution for managing subscriptions, feature access and wallet functionality.

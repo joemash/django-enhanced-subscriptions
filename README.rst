@@ -22,10 +22,10 @@ Installation
 
 .. code-block:: python
 
-   pip install django-enhanced-subcriptions
+   pip install django-enhanced-subscriptions
 
 
-2. Add "django-enhanced-subcriptions" to your ``INSTALLED_APPS`` setting:
+2. Add "django-enhanced-subscriptions" to your ``INSTALLED_APPS`` setting:
 
    .. code-block:: python
 
