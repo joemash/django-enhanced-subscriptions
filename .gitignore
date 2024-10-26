@@ -132,7 +132,6 @@ tags
 schema.json
 erp.nohup
 efile.txt
-pyproject.toml
 *.sqlite3
 
 *.mypy_cache/*
